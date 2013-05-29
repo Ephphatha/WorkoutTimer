@@ -1,0 +1,8 @@
+<RCC>
+  <qresource prefix="WorkoutTimer">
+    <file>Resources/add.png</file>
+    <file>Resources/arrow_down.png</file>
+    <file>Resources/arrow_up.png</file>
+    <file>Resources/delete.png</file>
+  </qresource>
+</RCC>

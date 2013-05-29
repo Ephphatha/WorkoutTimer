@@ -1,0 +1,373 @@
+/********************************************************************************
+** Form generated from reading UI file 'workouttimer.ui'
+**
+** Created by: Qt User Interface Compiler version 5.0.2
+**
+** WARNING! All changes made in this file will be lost when recompiling UI file!
+********************************************************************************/
+
+#ifndef UI_WORKOUTTIMER_H
+#define UI_WORKOUTTIMER_H
+
+#include <QtCore/QVariant>
+#include <QtWidgets/QAction>
+#include <QtWidgets/QApplication>
+#include <QtWidgets/QButtonGroup>
+#include <QtWidgets/QComboBox>
+#include <QtWidgets/QFormLayout>
+#include <QtWidgets/QFrame>
+#include <QtWidgets/QGroupBox>
+#include <QtWidgets/QHBoxLayout>
+#include <QtWidgets/QHeaderView>
+#include <QtWidgets/QLabel>
+#include <QtWidgets/QLineEdit>
+#include <QtWidgets/QListView>
+#include <QtWidgets/QMainWindow>
+#include <QtWidgets/QMenu>
+#include <QtWidgets/QMenuBar>
+#include <QtWidgets/QPushButton>
+#include <QtWidgets/QSpacerItem>
+#include <QtWidgets/QSpinBox>
+#include <QtWidgets/QStatusBar>
+#include <QtWidgets/QToolButton>
+#include <QtWidgets/QVBoxLayout>
+#include <QtWidgets/QWidget>
+
+QT_BEGIN_NAMESPACE
+
+class Ui_WorkoutTimerClass
+{
+public:
+    QAction *actionLoad;
+    QAction *actionSave;
+    QAction *actionExit;
+    QWidget *centralWidget;
+    QHBoxLayout *horizontalLayout_2;
+    QGroupBox *routineGroupBox;
+    QVBoxLayout *verticalLayout;
+    QListView *routineListView;
+    QFrame *frame;
+    QHBoxLayout *horizontalLayout;
+    QToolButton *addToolButton;
+    QToolButton *removeToolButton;
+    QSpacerItem *horizontalSpacer;
+    QToolButton *upToolButton;
+    QToolButton *downToolButton;
+    QWidget *widget;
+    QVBoxLayout *verticalLayout_2;
+    QGroupBox *settingsGroupBox;
+    QFormLayout *formLayout;
+    QLabel *intervalNameLabel;
+    QLineEdit *nameLineEdit;
+    QLabel *intervalTypeLabel;
+    QComboBox *intervalTypeComboBox;
+    QLabel *timeStepLabel;
+    QSpinBox *timeStepSpinBox;
+    QLabel *startingMultiplierLabel;
+    QSpinBox *startingMultiplierSpinBox;
+    QLabel *endingMultiplierLabel;
+    QSpinBox *endingMultiplierSpinBox;
+    QLabel *timerStyleLabel;
+    QComboBox *timerStyleComboBox;
+    QLabel *peakMultiplierLabel;
+    QSpinBox *peakMultiplierSpinBox;
+    QLabel *stepsAtPeakLabel;
+    QSpinBox *stepsAtPeakSpinBox;
+    QSpacerItem *verticalSpacer;
+    QPushButton *startButton;
+    QMenuBar *menuBar;
+    QMenu *menuFile;
+    QStatusBar *statusBar;
+
+    void setupUi(QMainWindow *WorkoutTimerClass)
+    {
+        if (WorkoutTimerClass->objectName().isEmpty())
+            WorkoutTimerClass->setObjectName(QStringLiteral("WorkoutTimerClass"));
+        WorkoutTimerClass->resize(600, 400);
+        QIcon icon;
+        icon.addFile(QStringLiteral("WorkoutTimer.ico"), QSize(), QIcon::Normal, QIcon::Off);
+        WorkoutTimerClass->setWindowIcon(icon);
+        actionLoad = new QAction(WorkoutTimerClass);
+        actionLoad->setObjectName(QStringLiteral("actionLoad"));
+        actionSave = new QAction(WorkoutTimerClass);
+        actionSave->setObjectName(QStringLiteral("actionSave"));
+        actionExit = new QAction(WorkoutTimerClass);
+        actionExit->setObjectName(QStringLiteral("actionExit"));
+        centralWidget = new QWidget(WorkoutTimerClass);
+        centralWidget->setObjectName(QStringLiteral("centralWidget"));
+        horizontalLayout_2 = new QHBoxLayout(centralWidget);
+        horizontalLayout_2->setSpacing(3);
+        horizontalLayout_2->setContentsMargins(11, 11, 11, 11);
+        horizontalLayout_2->setObjectName(QStringLiteral("horizontalLayout_2"));
+        horizontalLayout_2->setContentsMargins(3, 0, 3, 3);
+        routineGroupBox = new QGroupBox(centralWidget);
+        routineGroupBox->setObjectName(QStringLiteral("routineGroupBox"));
+        verticalLayout = new QVBoxLayout(routineGroupBox);
+        verticalLayout->setSpacing(0);
+        verticalLayout->setContentsMargins(11, 11, 11, 11);
+        verticalLayout->setObjectName(QStringLiteral("verticalLayout"));
+        verticalLayout->setContentsMargins(5, 0, 5, 0);
+        routineListView = new QListView(routineGroupBox);
+        routineListView->setObjectName(QStringLiteral("routineListView"));
+        routineListView->setDragEnabled(true);
+        routineListView->setDragDropMode(QAbstractItemView::InternalMove);
+        routineListView->setSelectionMode(QAbstractItemView::ExtendedSelection);
+
+        verticalLayout->addWidget(routineListView);
+
+        frame = new QFrame(routineGroupBox);
+        frame->setObjectName(QStringLiteral("frame"));
+        frame->setFrameShape(QFrame::StyledPanel);
+        frame->setFrameShadow(QFrame::Raised);
+        horizontalLayout = new QHBoxLayout(frame);
+        horizontalLayout->setSpacing(3);
+        horizontalLayout->setContentsMargins(11, 11, 11, 11);
+        horizontalLayout->setObjectName(QStringLiteral("horizontalLayout"));
+        horizontalLayout->setContentsMargins(0, 0, 0, 0);
+        addToolButton = new QToolButton(frame);
+        addToolButton->setObjectName(QStringLiteral("addToolButton"));
+        QIcon icon1;
+        icon1.addFile(QStringLiteral(":/WorkoutTimer/Resources/add.png"), QSize(), QIcon::Normal, QIcon::Off);
+        addToolButton->setIcon(icon1);
+
+        horizontalLayout->addWidget(addToolButton, 0, Qt::AlignLeft);
+
+        removeToolButton = new QToolButton(frame);
+        removeToolButton->setObjectName(QStringLiteral("removeToolButton"));
+        QIcon icon2;
+        icon2.addFile(QStringLiteral(":/WorkoutTimer/Resources/delete.png"), QSize(), QIcon::Normal, QIcon::Off);
+        removeToolButton->setIcon(icon2);
+
+        horizontalLayout->addWidget(removeToolButton, 0, Qt::AlignLeft);
+
+        horizontalSpacer = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
+
+        horizontalLayout->addItem(horizontalSpacer);
+
+        upToolButton = new QToolButton(frame);
+        upToolButton->setObjectName(QStringLiteral("upToolButton"));
+        QIcon icon3;
+        icon3.addFile(QStringLiteral(":/WorkoutTimer/Resources/arrow_up.png"), QSize(), QIcon::Normal, QIcon::Off);
+        upToolButton->setIcon(icon3);
+        upToolButton->setArrowType(Qt::NoArrow);
+
+        horizontalLayout->addWidget(upToolButton);
+
+        downToolButton = new QToolButton(frame);
+        downToolButton->setObjectName(QStringLiteral("downToolButton"));
+        QIcon icon4;
+        icon4.addFile(QStringLiteral(":/WorkoutTimer/Resources/arrow_down.png"), QSize(), QIcon::Normal, QIcon::Off);
+        downToolButton->setIcon(icon4);
+        downToolButton->setArrowType(Qt::NoArrow);
+
+        horizontalLayout->addWidget(downToolButton);
+
+
+        verticalLayout->addWidget(frame);
+
+
+        horizontalLayout_2->addWidget(routineGroupBox);
+
+        widget = new QWidget(centralWidget);
+        widget->setObjectName(QStringLiteral("widget"));
+        verticalLayout_2 = new QVBoxLayout(widget);
+        verticalLayout_2->setSpacing(6);
+        verticalLayout_2->setContentsMargins(11, 11, 11, 11);
+        verticalLayout_2->setObjectName(QStringLiteral("verticalLayout_2"));
+        verticalLayout_2->setContentsMargins(0, 0, 0, 5);
+        settingsGroupBox = new QGroupBox(widget);
+        settingsGroupBox->setObjectName(QStringLiteral("settingsGroupBox"));
+        formLayout = new QFormLayout(settingsGroupBox);
+        formLayout->setSpacing(6);
+        formLayout->setContentsMargins(11, 11, 11, 11);
+        formLayout->setObjectName(QStringLiteral("formLayout"));
+        formLayout->setLabelAlignment(Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter);
+        intervalNameLabel = new QLabel(settingsGroupBox);
+        intervalNameLabel->setObjectName(QStringLiteral("intervalNameLabel"));
+
+        formLayout->setWidget(0, QFormLayout::LabelRole, intervalNameLabel);
+
+        nameLineEdit = new QLineEdit(settingsGroupBox);
+        nameLineEdit->setObjectName(QStringLiteral("nameLineEdit"));
+
+        formLayout->setWidget(0, QFormLayout::FieldRole, nameLineEdit);
+
+        intervalTypeLabel = new QLabel(settingsGroupBox);
+        intervalTypeLabel->setObjectName(QStringLiteral("intervalTypeLabel"));
+
+        formLayout->setWidget(1, QFormLayout::LabelRole, intervalTypeLabel);
+
+        intervalTypeComboBox = new QComboBox(settingsGroupBox);
+        intervalTypeComboBox->setObjectName(QStringLiteral("intervalTypeComboBox"));
+
+        formLayout->setWidget(1, QFormLayout::FieldRole, intervalTypeComboBox);
+
+        timeStepLabel = new QLabel(settingsGroupBox);
+        timeStepLabel->setObjectName(QStringLiteral("timeStepLabel"));
+
+        formLayout->setWidget(2, QFormLayout::LabelRole, timeStepLabel);
+
+        timeStepSpinBox = new QSpinBox(settingsGroupBox);
+        timeStepSpinBox->setObjectName(QStringLiteral("timeStepSpinBox"));
+        timeStepSpinBox->setMinimum(1);
+        timeStepSpinBox->setMaximum(120);
+        timeStepSpinBox->setValue(10);
+
+        formLayout->setWidget(2, QFormLayout::FieldRole, timeStepSpinBox);
+
+        startingMultiplierLabel = new QLabel(settingsGroupBox);
+        startingMultiplierLabel->setObjectName(QStringLiteral("startingMultiplierLabel"));
+
+        formLayout->setWidget(3, QFormLayout::LabelRole, startingMultiplierLabel);
+
+        startingMultiplierSpinBox = new QSpinBox(settingsGroupBox);
+        startingMultiplierSpinBox->setObjectName(QStringLiteral("startingMultiplierSpinBox"));
+
+        formLayout->setWidget(3, QFormLayout::FieldRole, startingMultiplierSpinBox);
+
+        endingMultiplierLabel = new QLabel(settingsGroupBox);
+        endingMultiplierLabel->setObjectName(QStringLiteral("endingMultiplierLabel"));
+
+        formLayout->setWidget(5, QFormLayout::LabelRole, endingMultiplierLabel);
+
+        endingMultiplierSpinBox = new QSpinBox(settingsGroupBox);
+        endingMultiplierSpinBox->setObjectName(QStringLiteral("endingMultiplierSpinBox"));
+
+        formLayout->setWidget(5, QFormLayout::FieldRole, endingMultiplierSpinBox);
+
+        timerStyleLabel = new QLabel(settingsGroupBox);
+        timerStyleLabel->setObjectName(QStringLiteral("timerStyleLabel"));
+
+        formLayout->setWidget(7, QFormLayout::LabelRole, timerStyleLabel);
+
+        timerStyleComboBox = new QComboBox(settingsGroupBox);
+        timerStyleComboBox->setObjectName(QStringLiteral("timerStyleComboBox"));
+
+        formLayout->setWidget(7, QFormLayout::FieldRole, timerStyleComboBox);
+
+        peakMultiplierLabel = new QLabel(settingsGroupBox);
+        peakMultiplierLabel->setObjectName(QStringLiteral("peakMultiplierLabel"));
+
+        formLayout->setWidget(4, QFormLayout::LabelRole, peakMultiplierLabel);
+
+        peakMultiplierSpinBox = new QSpinBox(settingsGroupBox);
+        peakMultiplierSpinBox->setObjectName(QStringLiteral("peakMultiplierSpinBox"));
+
+        formLayout->setWidget(4, QFormLayout::FieldRole, peakMultiplierSpinBox);
+
+        stepsAtPeakLabel = new QLabel(settingsGroupBox);
+        stepsAtPeakLabel->setObjectName(QStringLiteral("stepsAtPeakLabel"));
+
+        formLayout->setWidget(6, QFormLayout::LabelRole, stepsAtPeakLabel);
+
+        stepsAtPeakSpinBox = new QSpinBox(settingsGroupBox);
+        stepsAtPeakSpinBox->setObjectName(QStringLiteral("stepsAtPeakSpinBox"));
+
+        formLayout->setWidget(6, QFormLayout::FieldRole, stepsAtPeakSpinBox);
+
+
+        verticalLayout_2->addWidget(settingsGroupBox);
+
+        verticalSpacer = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
+
+        verticalLayout_2->addItem(verticalSpacer);
+
+        startButton = new QPushButton(widget);
+        startButton->setObjectName(QStringLiteral("startButton"));
+
+        verticalLayout_2->addWidget(startButton);
+
+
+        horizontalLayout_2->addWidget(widget);
+
+        WorkoutTimerClass->setCentralWidget(centralWidget);
+        menuBar = new QMenuBar(WorkoutTimerClass);
+        menuBar->setObjectName(QStringLiteral("menuBar"));
+        menuBar->setGeometry(QRect(0, 0, 600, 21));
+        menuFile = new QMenu(menuBar);
+        menuFile->setObjectName(QStringLiteral("menuFile"));
+        WorkoutTimerClass->setMenuBar(menuBar);
+        statusBar = new QStatusBar(WorkoutTimerClass);
+        statusBar->setObjectName(QStringLiteral("statusBar"));
+        WorkoutTimerClass->setStatusBar(statusBar);
+#ifndef QT_NO_SHORTCUT
+        intervalNameLabel->setBuddy(nameLineEdit);
+        intervalTypeLabel->setBuddy(intervalTypeComboBox);
+        timeStepLabel->setBuddy(timeStepSpinBox);
+        startingMultiplierLabel->setBuddy(startingMultiplierSpinBox);
+        endingMultiplierLabel->setBuddy(endingMultiplierSpinBox);
+        timerStyleLabel->setBuddy(timerStyleComboBox);
+        peakMultiplierLabel->setBuddy(peakMultiplierSpinBox);
+        stepsAtPeakLabel->setBuddy(stepsAtPeakSpinBox);
+#endif // QT_NO_SHORTCUT
+        QWidget::setTabOrder(nameLineEdit, intervalTypeComboBox);
+        QWidget::setTabOrder(intervalTypeComboBox, timeStepSpinBox);
+        QWidget::setTabOrder(timeStepSpinBox, startingMultiplierSpinBox);
+        QWidget::setTabOrder(startingMultiplierSpinBox, peakMultiplierSpinBox);
+        QWidget::setTabOrder(peakMultiplierSpinBox, endingMultiplierSpinBox);
+        QWidget::setTabOrder(endingMultiplierSpinBox, stepsAtPeakSpinBox);
+        QWidget::setTabOrder(stepsAtPeakSpinBox, timerStyleComboBox);
+        QWidget::setTabOrder(timerStyleComboBox, addToolButton);
+        QWidget::setTabOrder(addToolButton, removeToolButton);
+        QWidget::setTabOrder(removeToolButton, startButton);
+
+        menuBar->addAction(menuFile->menuAction());
+        menuFile->addAction(actionLoad);
+        menuFile->addAction(actionSave);
+        menuFile->addSeparator();
+        menuFile->addAction(actionExit);
+
+        retranslateUi(WorkoutTimerClass);
+        QObject::connect(actionExit, SIGNAL(triggered()), WorkoutTimerClass, SLOT(close()));
+        QObject::connect(actionLoad, SIGNAL(triggered()), WorkoutTimerClass, SLOT(load()));
+        QObject::connect(actionSave, SIGNAL(triggered()), WorkoutTimerClass, SLOT(save()));
+        QObject::connect(routineListView, SIGNAL(indexesMoved(QModelIndexList)), WorkoutTimerClass, SLOT(routinesMoved(QModelIndexList)));
+
+        QMetaObject::connectSlotsByName(WorkoutTimerClass);
+    } // setupUi
+
+    void retranslateUi(QMainWindow *WorkoutTimerClass)
+    {
+        WorkoutTimerClass->setWindowTitle(QApplication::translate("WorkoutTimerClass", "WorkoutTimer", 0));
+        actionLoad->setText(QApplication::translate("WorkoutTimerClass", "Load", 0));
+        actionSave->setText(QApplication::translate("WorkoutTimerClass", "Save", 0));
+        actionExit->setText(QApplication::translate("WorkoutTimerClass", "Exit", 0));
+        routineGroupBox->setTitle(QApplication::translate("WorkoutTimerClass", "Routine", 0));
+        addToolButton->setText(QApplication::translate("WorkoutTimerClass", "Add", 0));
+        removeToolButton->setText(QApplication::translate("WorkoutTimerClass", "Remove", 0));
+        upToolButton->setText(QApplication::translate("WorkoutTimerClass", "Up", 0));
+        downToolButton->setText(QApplication::translate("WorkoutTimerClass", "Down", 0));
+        settingsGroupBox->setTitle(QApplication::translate("WorkoutTimerClass", "Interval Settings", 0));
+        intervalNameLabel->setText(QApplication::translate("WorkoutTimerClass", "Name:", 0));
+        intervalTypeLabel->setText(QApplication::translate("WorkoutTimerClass", "Interval Type:", 0));
+        intervalTypeComboBox->clear();
+        intervalTypeComboBox->insertItems(0, QStringList()
+         << QApplication::translate("WorkoutTimerClass", "Ladder", 0)
+         << QApplication::translate("WorkoutTimerClass", "Pyramid", 0)
+         << QApplication::translate("WorkoutTimerClass", "Plateau", 0)
+         << QApplication::translate("WorkoutTimerClass", "Constant", 0)
+        );
+        timeStepLabel->setText(QApplication::translate("WorkoutTimerClass", "Time Step:", 0));
+        startingMultiplierLabel->setText(QApplication::translate("WorkoutTimerClass", "Starting Multiplier:", 0));
+        endingMultiplierLabel->setText(QApplication::translate("WorkoutTimerClass", "Ending Multiplier:", 0));
+        timerStyleLabel->setText(QApplication::translate("WorkoutTimerClass", "Timer Style:", 0));
+        timerStyleComboBox->clear();
+        timerStyleComboBox->insertItems(0, QStringList()
+         << QApplication::translate("WorkoutTimerClass", "Countdown", 0)
+         << QApplication::translate("WorkoutTimerClass", "Count up", 0)
+        );
+        peakMultiplierLabel->setText(QApplication::translate("WorkoutTimerClass", "Peak Multiplier:", 0));
+        stepsAtPeakLabel->setText(QApplication::translate("WorkoutTimerClass", "Steps at Peak:", 0));
+        startButton->setText(QApplication::translate("WorkoutTimerClass", "Start Routine", 0));
+        menuFile->setTitle(QApplication::translate("WorkoutTimerClass", "File", 0));
+    } // retranslateUi
+
+};
+
+namespace Ui {
+    class WorkoutTimerClass: public Ui_WorkoutTimerClass {};
+} // namespace Ui
+
+QT_END_NAMESPACE
+
+#endif // UI_WORKOUTTIMER_H
