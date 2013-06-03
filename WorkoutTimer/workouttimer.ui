@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>600</width>
-    <height>400</height>
+    <height>562</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -69,13 +69,7 @@
         </widget>
        </item>
        <item>
-        <widget class="QFrame" name="frame">
-         <property name="frameShape">
-          <enum>QFrame::StyledPanel</enum>
-         </property>
-         <property name="frameShadow">
-          <enum>QFrame::Raised</enum>
-         </property>
+        <widget class="QWidget" name="toolbarWidget" native="true">
          <layout class="QHBoxLayout" name="horizontalLayout">
           <property name="spacing">
            <number>3</number>
@@ -161,8 +155,8 @@
       </layout>
      </widget>
     </item>
-    <item>
-     <widget class="QWidget" name="widget" native="true">
+    <item alignment="Qt::AlignRight">
+     <widget class="QWidget" name="settingsWidget" native="true">
       <layout class="QVBoxLayout" name="verticalLayout_2">
        <property name="leftMargin">
         <number>0</number>
@@ -176,7 +170,7 @@
        <property name="bottomMargin">
         <number>5</number>
        </property>
-       <item>
+       <item alignment="Qt::AlignTop">
         <widget class="QGroupBox" name="settingsGroupBox">
          <property name="title">
           <string>Interval Settings</string>
@@ -186,7 +180,7 @@
            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
           </property>
           <item row="0" column="0">
-           <widget class="QLabel" name="intervalNameLabel">
+           <widget class="QLabel" name="nameLabel">
             <property name="text">
              <string>Name:</string>
             </property>
@@ -233,65 +227,29 @@
            </widget>
           </item>
           <item row="2" column="0">
-           <widget class="QLabel" name="timeStepLabel">
+           <widget class="QLabel" name="setsLabel">
             <property name="text">
-             <string>Time Step:</string>
+             <string>Sets:</string>
             </property>
             <property name="buddy">
-             <cstring>timeStepSpinBox</cstring>
+             <cstring>setsSpinBox</cstring>
             </property>
            </widget>
           </item>
           <item row="2" column="1">
-           <widget class="QSpinBox" name="timeStepSpinBox">
-            <property name="minimum">
-             <number>1</number>
-            </property>
-            <property name="maximum">
-             <number>120</number>
-            </property>
-            <property name="value">
-             <number>10</number>
-            </property>
-           </widget>
+           <widget class="QSpinBox" name="setsSpinBox"/>
           </item>
-          <item row="3" column="0">
-           <widget class="QLabel" name="startingMultiplierLabel">
-            <property name="text">
-             <string>Starting Multiplier:</string>
-            </property>
-            <property name="buddy">
-             <cstring>startingMultiplierSpinBox</cstring>
-            </property>
-           </widget>
-          </item>
-          <item row="3" column="1">
-           <widget class="QSpinBox" name="startingMultiplierSpinBox"/>
-          </item>
-          <item row="5" column="0">
-           <widget class="QLabel" name="endingMultiplierLabel">
-            <property name="text">
-             <string>Ending Multiplier:</string>
-            </property>
-            <property name="buddy">
-             <cstring>endingMultiplierSpinBox</cstring>
-            </property>
-           </widget>
-          </item>
-          <item row="5" column="1">
-           <widget class="QSpinBox" name="endingMultiplierSpinBox"/>
-          </item>
-          <item row="7" column="0">
+          <item row="4" column="0">
            <widget class="QLabel" name="timerStyleLabel">
             <property name="text">
-             <string>Timer Style:</string>
+             <string>Timer:</string>
             </property>
             <property name="buddy">
              <cstring>timerStyleComboBox</cstring>
             </property>
            </widget>
           </item>
-          <item row="7" column="1">
+          <item row="4" column="1">
            <widget class="QComboBox" name="timerStyleComboBox">
             <item>
              <property name="text">
@@ -305,37 +263,174 @@
             </item>
            </widget>
           </item>
-          <item row="4" column="0">
-           <widget class="QLabel" name="peakMultiplierLabel">
+          <item row="3" column="0">
+           <widget class="QLabel" name="setsAtPeakLabel">
             <property name="text">
-             <string>Peak Multiplier:</string>
-            </property>
-            <property name="buddy">
-             <cstring>peakMultiplierSpinBox</cstring>
+             <string>Sets at Peak:</string>
             </property>
            </widget>
           </item>
-          <item row="4" column="1">
-           <widget class="QSpinBox" name="peakMultiplierSpinBox"/>
+          <item row="3" column="1">
+           <widget class="QSpinBox" name="setsAtPeakSpinBox"/>
           </item>
-          <item row="6" column="0">
-           <widget class="QLabel" name="stepsAtPeakLabel">
+         </layout>
+        </widget>
+       </item>
+       <item alignment="Qt::AlignTop">
+        <widget class="QGroupBox" name="workoutPeriodsGroupBox">
+         <property name="title">
+          <string>Workout Periods</string>
+         </property>
+         <layout class="QFormLayout" name="formLayout_3">
+          <property name="labelAlignment">
+           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+          </property>
+          <item row="0" column="0">
+           <widget class="QLabel" name="workoutStartAtLabel">
             <property name="text">
-             <string>Steps at Peak:</string>
+             <string>Start at:</string>
             </property>
             <property name="buddy">
-             <cstring>stepsAtPeakSpinBox</cstring>
+             <cstring>workoutStartAtDoubleSpinBox</cstring>
             </property>
            </widget>
           </item>
-          <item row="6" column="1">
-           <widget class="QSpinBox" name="stepsAtPeakSpinBox"/>
+          <item row="1" column="0">
+           <widget class="QLabel" name="workoutPeakAtLabel">
+            <property name="text">
+             <string>Peak at:</string>
+            </property>
+            <property name="buddy">
+             <cstring>workoutPeakAtDoubleSpinBox</cstring>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="0">
+           <widget class="QLabel" name="workoutEndAtLabel">
+            <property name="text">
+             <string>End at:</string>
+            </property>
+            <property name="buddy">
+             <cstring>workoutEndAtDoubleSpinBox</cstring>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="QDoubleSpinBox" name="workoutStartAtDoubleSpinBox">
+            <property name="suffix">
+             <string> seconds</string>
+            </property>
+            <property name="decimals">
+             <number>0</number>
+            </property>
+            <property name="minimum">
+             <double>1.000000000000000</double>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="1">
+           <widget class="QDoubleSpinBox" name="workoutPeakAtDoubleSpinBox">
+            <property name="suffix">
+             <string> seconds</string>
+            </property>
+            <property name="decimals">
+             <number>0</number>
+            </property>
+            <property name="minimum">
+             <double>1.000000000000000</double>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="1">
+           <widget class="QDoubleSpinBox" name="workoutEndAtDoubleSpinBox">
+            <property name="suffix">
+             <string> seconds</string>
+            </property>
+            <property name="decimals">
+             <number>0</number>
+            </property>
+            <property name="minimum">
+             <double>1.000000000000000</double>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item alignment="Qt::AlignTop">
+        <widget class="QGroupBox" name="restPeriodsGroupBox">
+         <property name="title">
+          <string>Rest Periods</string>
+         </property>
+         <layout class="QFormLayout" name="formLayout_2">
+          <property name="labelAlignment">
+           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+          </property>
+          <item row="0" column="0">
+           <widget class="QLabel" name="restStartAtLabel">
+            <property name="text">
+             <string>Start at:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="QDoubleSpinBox" name="restStartAtDoubleSpinBox">
+            <property name="suffix">
+             <string> seconds</string>
+            </property>
+            <property name="decimals">
+             <number>0</number>
+            </property>
+            <property name="minimum">
+             <double>1.000000000000000</double>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <widget class="QLabel" name="restPeakAtLabel">
+            <property name="text">
+             <string>Peak at:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="1">
+           <widget class="QDoubleSpinBox" name="restPeakAtDoubleSpinBox">
+            <property name="suffix">
+             <string> seconds</string>
+            </property>
+            <property name="decimals">
+             <number>0</number>
+            </property>
+            <property name="minimum">
+             <double>1.000000000000000</double>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="0">
+           <widget class="QLabel" name="restEndAtLabel">
+            <property name="text">
+             <string>End at:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="1">
+           <widget class="QDoubleSpinBox" name="restEndAtDoubleSpinBox">
+            <property name="suffix">
+             <string> seconds</string>
+            </property>
+            <property name="decimals">
+             <number>0</number>
+            </property>
+            <property name="minimum">
+             <double>1.000000000000000</double>
+            </property>
+           </widget>
           </item>
          </layout>
         </widget>
        </item>
        <item>
-        <spacer name="verticalSpacer">
+        <spacer name="upperVerticalSpacer">
          <property name="orientation">
           <enum>Qt::Vertical</enum>
          </property>
@@ -347,12 +442,25 @@
          </property>
         </spacer>
        </item>
-       <item>
+       <item alignment="Qt::AlignHCenter|Qt::AlignVCenter">
         <widget class="QPushButton" name="startButton">
          <property name="text">
           <string>Start Routine</string>
          </property>
         </widget>
+       </item>
+       <item>
+        <spacer name="lowerVerticalSpacer">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>40</height>
+          </size>
+         </property>
+        </spacer>
        </item>
       </layout>
      </widget>
@@ -400,15 +508,10 @@
  <tabstops>
   <tabstop>nameLineEdit</tabstop>
   <tabstop>intervalTypeComboBox</tabstop>
-  <tabstop>timeStepSpinBox</tabstop>
-  <tabstop>startingMultiplierSpinBox</tabstop>
-  <tabstop>peakMultiplierSpinBox</tabstop>
-  <tabstop>endingMultiplierSpinBox</tabstop>
-  <tabstop>stepsAtPeakSpinBox</tabstop>
+  <tabstop>setsSpinBox</tabstop>
   <tabstop>timerStyleComboBox</tabstop>
   <tabstop>addToolButton</tabstop>
   <tabstop>removeToolButton</tabstop>
-  <tabstop>startButton</tabstop>
  </tabstops>
  <resources>
   <include location="workouttimer.qrc"/>

@@ -2,256 +2,190 @@
 
 #include <sstream>
 
-QList<QString> Interval::Type::types;
-QList<QString> Interval::Direction::directions;
+#include <QMetaEnum>
 
-Interval::Type::Type(int value) : value(value)
+Interval::SetParameters::SetParameters(
+  double startAt,
+  double peakAt,
+  double endAt)
 {
-  if (this->value < 0 || this->value >= Interval::Type::Types().size())
+  this->Initialise(startAt, peakAt, endAt);
+}
+
+
+Interval::SetParameters::SetParameters(const Interval::SetParameters &rhs)
+{
+  this->Initialise(rhs.StartAt(), rhs.PeakAt(), rhs.EndAt());
+}
+
+
+Interval::SetParameters::SetParameters(const QJsonObject &json)
+{
+  this->Initialise();
+
+  QJsonValue val = json[this->startAt.first];
+
+  if (!val.isUndefined() && val.isDouble())
   {
-    std::stringstream errorMessageStream;
+    this->StartAt(static_cast<int>(val.toDouble()));
+  }
 
-    errorMessageStream << "Value must be in the range [0," << Interval::Type::Types().size() << ").";
+  val = json[this->peakAt.first];
 
-    throw std::out_of_range(errorMessageStream.str());
+  if (!val.isUndefined() && val.isDouble())
+  {
+    this->PeakAt(static_cast<int>(val.toDouble()));
+  }
+
+  val = json[this->endAt.first];
+
+  if (!val.isUndefined() && val.isDouble())
+  {
+    this->EndAt(static_cast<int>(val.toDouble()));
   }
 }
 
-Interval::Type::Type(const QString &name) : value(-1)
+
+Interval::SetParameters::~SetParameters(void)
 {
-  for (int i = 0; i < Interval::Type::Types().size(); ++i)
+}
+
+
+Interval::SetParameters::operator QJsonObject() const
+{
+  QJsonObject obj;
+
+  if (this->StartAt() > 0)
   {
-    if (name == Interval::Type::Types()[i])
-    {
-      this->value = i;
-      break;
-    }
+    obj[this->startAt.first] = this->StartAt();
+  }
+  if (this->PeakAt() > 0)
+  {
+    obj[this->peakAt.first] = this->PeakAt();
+  }
+  if (this->EndAt() > 0)
+  {
+    obj[this->endAt.first] = this->EndAt();
   }
 
-  if (this->value < 0 || this->value >= Interval::Type::Types().size())
-  {
-    std::stringstream errorMessageStream;
-
-    errorMessageStream << "Valid types are one of ";
-
-    for (int i = 0; i < Interval::Type::Types().size(); ++i)
-    {
-      if (i > 0)
-      {
-        errorMessageStream << ",";
-      }
-      errorMessageStream << "\"" << Interval::Type::Types()[i].toStdString() << "\"";
-    }
-
-    errorMessageStream << ".";
-
-    throw std::invalid_argument(errorMessageStream.str());
-  }
+  return obj;
 }
 
-const QList<QString>& Interval::Type::Types()
-{
-  if (Interval::Type::types.isEmpty())
-  {
-    Interval::Type::InitialiseStaticData();
-  }
 
-  return Interval::Type::types;
+Interval::SetParameters::operator QJsonValue() const
+{
+  return QJsonObject(*this);
 }
 
-void Interval::Type::InitialiseStaticData()
+
+double Interval::SetParameters::StartAt() const
 {
-  Interval::Type::types << "Ladder" << "Pyramid" << "Plateau" << "Constant";
+  return this->startAt.second;
 }
 
-Interval::Type::operator QString() const
+double Interval::SetParameters::PeakAt() const
 {
-  return Interval::Type::Types()[this->value];
+  return this->peakAt.second;
 }
 
-int Interval::Type::Value() const
+double Interval::SetParameters::EndAt() const
 {
-  return this->value;
+  return this->endAt.second;
 }
 
-bool Interval::Type::operator==(const Interval::Type &rhs) const
+void Interval::SetParameters::StartAt(double seconds)
 {
-  return this->value == rhs.value;
+  this->startAt.second = seconds;
 }
 
-bool Interval::Type::operator!=(const Interval::Type &rhs) const
+void Interval::SetParameters::PeakAt(double seconds)
 {
-  return !(*this == rhs);
+  this->peakAt.second = seconds;
 }
 
-Interval::Direction::Direction(int value) : value(value)
+void Interval::SetParameters::EndAt(double seconds)
 {
-  if (this->value < 0 || this->value >= Interval::Direction::Directions().size())
-  {
-    std::stringstream errorMessageStream;
-
-    errorMessageStream << "Value must be in the range [0," << Interval::Direction::Directions().size() << ").";
-
-    throw std::out_of_range(errorMessageStream.str());
-  }
-}
-
-Interval::Direction::Direction(const QString &name) : value(-1)
-{
-  for (int i = 0; i < Interval::Direction::Directions().size(); ++i)
-  {
-    if (name == Interval::Direction::Directions()[i])
-    {
-      this->value = i;
-      break;
-    }
-  }
-
-  if (this->value < 0 || this->value >= Interval::Direction::Directions().size())
-  {
-    std::stringstream errorMessageStream;
-
-    errorMessageStream << "Valid directions are one of ";
-
-    for (int i = 0; i < Interval::Direction::Directions().size(); ++i)
-    {
-      if (i > 0)
-      {
-        errorMessageStream << ",";
-      }
-      errorMessageStream << "\"" << Interval::Direction::Directions()[i].toStdString() << "\"";
-    }
-
-    errorMessageStream << ".";
-
-    throw std::invalid_argument(errorMessageStream.str());
-  }
-}
-
-const QList<QString>& Interval::Direction::Directions()
-{
-  if (Interval::Direction::directions.isEmpty())
-  {
-    Interval::Direction::InitialiseStaticData();
-  }
-  return Interval::Direction::directions;
-}
-
-void Interval::Direction::InitialiseStaticData()
-{
-  Interval::Direction::directions << "Down" << "Up";
-}
-
-Interval::Direction::operator QString() const
-{
-  return Interval::Direction::Directions()[this->value];
-}
-
-int Interval::Direction::Value() const
-{
-  return this->value;
-}
-
-bool Interval::Direction::operator==(const Interval::Direction &rhs) const
-{
-  return this->value == rhs.value;
-}
-
-bool Interval::Direction::operator!=(const Interval::Direction &rhs) const
-{
-  return !(*this == rhs);
+  this->endAt.second = seconds;
 }
 
 Interval::Interval(
   const QString &name,
   const Interval::Type &type,
-  double timeStep,
-  double startMultiplier,
-  double peakMultiplier,
-  double endMultiplier,
-  double stepsAtPeak,
+  int sets,
+  const Interval::SetParameters &workoutParameters,
+  const Interval::SetParameters &restParameters,
+  int setsAtPeak,
   const Interval::Direction &countDirection)
 {
-  this->Initialise(name, type, timeStep, startMultiplier, peakMultiplier, endMultiplier, stepsAtPeak, countDirection);
+  this->Initialise(name, type, sets, workoutParameters, restParameters, setsAtPeak, countDirection);
 }
 
 Interval::Interval(const Interval &rhs)
 {
-  this->Initialise(rhs.Name(), rhs.GetType(), rhs.TimeStep(), rhs.StartMultiplier(), rhs.PeakMultiplier(), rhs.EndMultiplier(), rhs.StepsAtPeak(), rhs.CountDirection());
+  this->Initialise(rhs.Name(), rhs.GetType(), rhs.Sets(), rhs.WorkoutParameters(), rhs.RestParameters(), rhs.SetsAtPeak(), rhs.CountDirection());
 }
 
 Interval::Interval(const QJsonObject &json)
 {
   this->Initialise();
 
-  QJsonValue val = json[this->Name()];
+  QJsonValue val = json[this->name.first];
 
   if (!val.isUndefined() && val.isString())
   {
-    this->SetName(val.toString());
+    this->Name(val.toString());
   }
 
-  val = json[this->GetType()];
+  val = json[this->type.first];
 
   if (!val.isUndefined() && val.isString())
   {
-    try
+    bool success;
+    int enumVal = Interval::staticMetaObject.enumerator(Interval::staticMetaObject.indexOfEnumerator("Type")).keyToValue(val.toString().toStdString().c_str(), &success);
+    if (success)
     {
-      this->ChangeType(Interval::Type(val.toString()));
-    }
-    catch (std::invalid_argument)
-    {
-      // Malformed JSON, ignore and use default value.
+      this->ChangeType(static_cast<Interval::Type>(enumVal));
     }
   }
 
-  val = json[this->CountDirection()];
+  val = json[this->countDirection.first];
 
   if (!val.isUndefined() && val.isString())
   {
-    try
+    bool success;
+    int enumVal = Interval::staticMetaObject.enumerator(Interval::staticMetaObject.indexOfEnumerator("Direction")).keyToValue(val.toString().toStdString().c_str(), &success);
+    if (success)
     {
-      this->SetCountDirection(Interval::Direction(val.toString()));
-    }
-    catch (std::invalid_argument)
-    {
-      // Malformed JSON, ignore and use default value.
+      this->CountDirection(static_cast<Interval::Direction>(enumVal));
     }
   }
 
-  val = json[this->timeStep.first];
+  val = json[this->sets.first];
 
   if (!val.isUndefined() && val.isDouble())
   {
-    this->SetTimeStep(val.toDouble());
+    this->Sets(static_cast<int>(val.toDouble()));
   }
 
-  val = json[this->startMultiplier.first];
+  val = json[this->workoutParameters.first];
 
-  if (!val.isUndefined() && val.isDouble())
+  if (!val.isUndefined() && val.isObject())
   {
-    this->SetStartMultiplier(val.toDouble());
+    this->SetWorkoutParameters(val.toObject());
   }
 
-  val = json[this->peakMultiplier.first];
+  val = json[this->restParameters.first];
 
-  if (!val.isUndefined() && val.isDouble())
+  if (!val.isUndefined() && val.isObject())
   {
-    this->SetPeakMultiplier(val.toDouble());
+    this->SetRestParameters(val.toObject());
   }
 
-  val = json[this->endMultiplier.first];
+  val = json[this->setsAtPeak.first];
 
   if (!val.isUndefined() && val.isDouble())
   {
-    this->SetEndMultiplier(val.toDouble());
-  }
-
-  val = json[this->stepsAtPeak.first];
-
-  if (!val.isUndefined() && val.isDouble())
-  {
-    this->SetStepsAtPeak(val.toDouble());
+    this->SetsAtPeak(static_cast<int>(val.toDouble()));
   }
 }
 
@@ -262,30 +196,23 @@ Interval::~Interval(void)
 void Interval::Initialise(
   const QString &name,
   const Type &type,
-  double timeStep,
-  double startMultiplier,
-  double peakMultiplier,
-  double endMultiplier,
-  double stepsAtPeak,
+  int sets,
+  const Interval::SetParameters &workoutParameters,
+  const Interval::SetParameters &restParameters,
+  int setsAtPeak,
   const Direction &countDirection)
 {
   this->name = std::pair<QString, QString>("Name", name);
   this->type = std::pair<QString, Interval::Type>("Interval Type", type);
 
-  this->timeStep = std::pair<QString, double>("Time Step", 0);
-  this->SetTimeStep(timeStep);
+  this->sets = std::pair<QString, int>("Sets", sets);
 
-  this->startMultiplier = std::pair<QString, double>("Starting Multiplier", 0);
-  this->SetStartMultiplier(startMultiplier);
+  this->workoutParameters = std::pair<QString, Interval::SetParameters>("Workout Parameters", workoutParameters);
 
-  this->peakMultiplier = std::pair<QString, double>("Peak Multiplier", 0);
-  this->SetPeakMultiplier(peakMultiplier);
+  this->restParameters = std::pair<QString, Interval::SetParameters>("Workout Parameters", restParameters);
 
-  this->endMultiplier = std::pair<QString, double>("Ending Multiplier", 0);
-  this->SetEndMultiplier(endMultiplier);
-
-  this->stepsAtPeak = std::pair<QString, double>("Steps at Peak", 0);
-  this->SetStepsAtPeak(stepsAtPeak);
+  this->setsAtPeak = std::pair<QString, int>("Steps at Peak", 0);
+  this->SetsAtPeak(setsAtPeak);
 
   this->countDirection = std::pair<QString, Interval::Direction>("Count Direction", countDirection);
 }
@@ -294,27 +221,19 @@ Interval::operator QJsonObject() const
 {
   QJsonObject obj;
 
-  obj[this->name.first] = this->name.second;
-  obj[this->type.first] = QString(this->type.second);
-  obj[this->countDirection.first] = QString(this->countDirection.second);
+  obj[this->name.first] = this->Name();
+  obj[this->type.first] = QString(Interval::staticMetaObject.enumerator(Interval::staticMetaObject.indexOfEnumerator("Type")).valueToKey(this->GetType()));
+  obj[this->countDirection.first] = QString(Interval::staticMetaObject.enumerator(Interval::staticMetaObject.indexOfEnumerator("Direction")).valueToKey(this->CountDirection()));
 
-  obj[this->timeStep.first] = this->timeStep.second;
+  obj[this->sets.first] = this->Sets();
 
-  if (this->startMultiplier.second > 0)
+  obj[this->workoutParameters.first] = this->WorkoutParameters();
+
+  obj[this->restParameters.first] = this->RestParameters();
+
+  if (this->SetsAtPeak() > 0)
   {
-    obj[this->startMultiplier.first] = this->startMultiplier.second;
-  }
-  if (this->peakMultiplier.second > 0)
-  {
-    obj[this->peakMultiplier.first] = this->peakMultiplier.second;
-  }
-  if (this->endMultiplier.second > 0)
-  {
-    obj[this->endMultiplier.first] = this->endMultiplier.second;
-  }
-  if (this->stepsAtPeak.second > 0)
-  {
-    obj[this->stepsAtPeak.first] = this->stepsAtPeak.second;
+    obj[this->setsAtPeak.first] = this->SetsAtPeak();
   }
 
   return obj;
@@ -325,7 +244,7 @@ Interval::operator QJsonValue() const
   return QJsonObject(*this);
 }
 
-void Interval::SetName(const QString &name)
+void Interval::Name(const QString &name)
 {
   this->name.second = name;
 }
@@ -333,60 +252,88 @@ void Interval::SetName(const QString &name)
 void Interval::ChangeType(const Interval::Type &type)
 {
   this->type.second = type;
-  if (this->type.second == Interval::Type("Ladder"))
+  switch(this->type.second)
   {
-    this->peakMultiplier.second = 0;
-    this->stepsAtPeak.second = 0;
-  }
-  else if (this->type.second == Interval::Type("Pyramid"))
-  {
-    this->stepsAtPeak.second = 0;
-  }
-  else if (this->type.second == Interval::Type("Plateau"))
-  {
-  }
-  else if (this->type.second == Interval::Type("Constant"))
-  {
-    this->startMultiplier.second = 0;
-    this->endMultiplier.second = 0;
+  case Interval::Type::LADDER:
+    this->setsAtPeak.second = 0;
+    this->WorkoutParameters().PeakAt(0);
+    this->RestParameters().PeakAt(0);
+    break;
+
+  case Interval::Type::PYRAMID:
+    this->setsAtPeak.second = 0;
+    break;
+
+  case Interval::Type::PLATEAU:
+    break;
+
+  case Interval::Type::CONSTANT:
+    this->WorkoutParameters().StartAt(0);
+    this->WorkoutParameters().EndAt(0);
+    this->RestParameters().StartAt(0);
+    this->RestParameters().EndAt(0);
+    break;
   }
 }
 
-void Interval::SetTimeStep(double timeStep)
+void Interval::Sets(int sets)
 {
-  if (timeStep > 0) {
-    this->timeStep.second = timeStep;
-  }
-}
-void Interval::SetStartMultiplier(double startMultiplier)
-{
-  if (startMultiplier > 0 && this->type.second != Interval::Type("Constant")) {
-    this->startMultiplier.second = startMultiplier;
+  if (sets > 0) {
+    this->sets.second = sets;
   }
 }
 
-void Interval::SetPeakMultiplier(double peakMultiplier)
+void Interval::WorkoutPeriodStartAt(double startAt)
 {
-  if (peakMultiplier > 0 && this->type.second != Interval::Type("Ladder")) {
-    this->peakMultiplier.second = peakMultiplier;
+  if (startAt > 0 && this->type.second != Interval::Type::CONSTANT) {
+    this->WorkoutParameters().StartAt(startAt);
   }
 }
 
-void Interval::SetEndMultiplier(double endMultiplier)
+void Interval::WorkoutPeriodPeakAt(double peakAt)
 {
-  if (endMultiplier > 0 && this->type.second != Interval::Type("Constant")) {
-    this->endMultiplier.second = endMultiplier;
+  if (peakAt > 0 && this->type.second != Interval::Type::LADDER) {
+    this->WorkoutParameters().PeakAt(peakAt);
   }
 }
 
-void Interval::SetStepsAtPeak(double stepsAtPeak)
+void Interval::WorkoutPeriodEndAt(double endAt)
 {
-  if (stepsAtPeak > 0 && this->type.second != Interval::Type("Ladder") && this->type.second != Interval::Type("Pyramid")) {
-    this->stepsAtPeak.second = stepsAtPeak;
+  if (endAt > 0 && this->type.second != Interval::Type::CONSTANT) {
+    this->WorkoutParameters().EndAt(endAt);
   }
 }
 
-void Interval::SetCountDirection(const Interval::Direction& countDirection)
+
+void Interval::RestPeriodStartAt(double startAt)
+{
+  if (startAt > 0 && this->type.second != Interval::Type::CONSTANT) {
+    this->RestParameters().StartAt(startAt);
+  }
+}
+
+void Interval::RestPeriodPeakAt(double peakAt)
+{
+  if (peakAt > 0 && this->type.second != Interval::Type::LADDER) {
+    this->RestParameters().PeakAt(peakAt);
+  }
+}
+
+void Interval::RestPeriodEndAt(double endAt)
+{
+  if (endAt > 0 && this->type.second != Interval::Type::CONSTANT) {
+    this->RestParameters().EndAt(endAt);
+  }
+}
+
+void Interval::SetsAtPeak(int setsAtPeak)
+{
+  if (setsAtPeak > 0 && this->type.second != Interval::Type::LADDER && this->type.second != Interval::Type::PYRAMID) {
+    this->setsAtPeak.second = setsAtPeak;
+  }
+}
+
+void Interval::CountDirection(const Interval::Direction& countDirection)
 {
   this->countDirection.second = countDirection;
 }
@@ -402,32 +349,87 @@ const Interval::Type& Interval::GetType() const
   return this->type.second;
 }
 
-double Interval::TimeStep() const
+int Interval::Sets() const
 {
-  return this->timeStep.second;
+  return this->sets.second;
 }
 
-double Interval::StartMultiplier() const
+double Interval::WorkoutPeriodStartAt() const
 {
-  return this->startMultiplier.second;
+  return this->WorkoutParameters().StartAt();
 }
 
-double Interval::PeakMultiplier() const
+double Interval::WorkoutPeriodPeakAt() const
 {
-  return this->peakMultiplier.second;
+  return this->WorkoutParameters().PeakAt();
 }
 
-double Interval::EndMultiplier() const
+double Interval::WorkoutPeriodEndAt() const
 {
-  return this->endMultiplier.second;
+  return this->WorkoutParameters().EndAt();
 }
 
-double Interval::StepsAtPeak() const
+double Interval::RestPeriodStartAt() const
 {
-  return this->stepsAtPeak.second;
+  return this->RestParameters().StartAt();
+}
+
+double Interval::RestPeriodPeakAt() const
+{
+  return this->RestParameters().PeakAt();
+}
+
+double Interval::RestPeriodEndAt() const
+{
+  return this->RestParameters().EndAt();
+}
+
+int Interval::SetsAtPeak() const
+{
+  return this->setsAtPeak.second;
 }
 
 const Interval::Direction& Interval::CountDirection() const
 {
   return this->countDirection.second;
+}
+
+const Interval::SetParameters &Interval::WorkoutParameters() const
+{
+  return this->workoutParameters.second;
+}
+
+Interval::SetParameters &Interval::WorkoutParameters()
+{
+  return this->workoutParameters.second;
+}
+
+const Interval::SetParameters &Interval::RestParameters() const
+{
+  return this->restParameters.second;
+}
+
+Interval::SetParameters &Interval::RestParameters()
+{
+  return this->restParameters.second;
+}
+
+void Interval::SetWorkoutParameters(const Interval::SetParameters &parameters)
+{
+  this->workoutParameters.second = parameters;
+}
+
+void Interval::SetRestParameters(const Interval::SetParameters &parameters)
+{
+  this->restParameters.second = parameters;
+}
+
+void Interval::SetParameters::Initialise(
+  double startAt,
+  double peakAt,
+  double endAt)
+{
+  this->startAt = std::pair<QString, double>("Start At", startAt);
+  this->peakAt = std::pair<QString, double>("Peak At", peakAt);
+  this->endAt = std::pair<QString, double>("End At", endAt);
 }

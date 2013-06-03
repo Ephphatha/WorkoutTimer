@@ -3,26 +3,65 @@
 
 #pragma once
 
+#include <QObject>
+
 #include <QString>
 #include <QJsonObject>
 #include <QMetaType>
 #include <QList>
 
-class Interval
+class Interval : public QObject
 {
+  Q_OBJECT;
+
 public:
-  class Type;
-  class Direction;
+  enum Type;
+  enum Direction;
+
+  class SetParameters {
+  public:
+    SetParameters(
+      double startAt = 1,
+      double peakAt = 1,
+      double endAt = 1);
+    
+    SetParameters(const SetParameters &rhs);
+
+    SetParameters(const QJsonObject &json);
+
+    virtual ~SetParameters(void);
+
+    operator QJsonObject() const;
+
+    operator QJsonValue() const;
+
+    double StartAt() const;
+    double PeakAt() const;
+    double EndAt() const;
+
+    void StartAt(double seconds);
+    void PeakAt(double seconds);
+    void EndAt(double seconds);
+
+  private:
+    void Initialise(
+      double startAt = 1,
+      double peakAt = 1,
+      double endAt = 1);
+
+    std::pair<QString, double> startAt;
+    std::pair<QString, double> peakAt;
+    std::pair<QString, double> endAt;
+  };
 
   Interval(
     const QString &name = "Interval",
-    const Type &type = Type("Ladder"),
-    double timeStep = 10,
-    double startMultiplier = 1,
-    double peakMultiplier = 0,
-    double endMultiplier = 10,
-    double stepsAtPeak = 0,
-    const Direction &countDirection = Direction("Down"));
+    const Type &type = LADDER,
+    int sets = 10,
+    const SetParameters &workoutParameters = SetParameters(),
+    const SetParameters &restParameters = SetParameters(),
+    int setsAtPeak = 1,
+    const Direction &countDirection = DOWN);
 
   Interval(const Interval &rhs);
 
@@ -34,95 +73,72 @@ public:
 
   operator QJsonValue() const;
 
-  void SetName(const QString &name);
+  void Name(const QString &name);
   void ChangeType(const Type &type);
-  void SetTimeStep(double timeStep);
-  void SetStartMultiplier(double startMultiplier);
-  void SetPeakMultiplier(double peakMultiplier);
-  void SetEndMultiplier(double endMultiplier);
-  void SetStepsAtPeak(double stepsAtPeak);
-  void SetCountDirection(const Direction& countDirection);
+  void Sets(int sets);
+  void WorkoutPeriodStartAt(double startAt);
+  void WorkoutPeriodPeakAt(double peakAt);
+  void WorkoutPeriodEndAt(double endAt);
+  void RestPeriodStartAt(double startAt);
+  void RestPeriodPeakAt(double peakAt);
+  void RestPeriodEndAt(double endAt);
+  void SetsAtPeak(int setsAtPeak);
+  void CountDirection(const Direction& countDirection);
 
   const QString& Name() const;
   const Type& GetType() const;
-  double TimeStep() const;
-  double StartMultiplier() const;
-  double PeakMultiplier() const;
-  double EndMultiplier() const;
-  double StepsAtPeak() const;
+  int Sets() const;
+  double WorkoutPeriodStartAt() const;
+  double WorkoutPeriodPeakAt() const;
+  double WorkoutPeriodEndAt() const;
+  double RestPeriodStartAt() const;
+  double RestPeriodPeakAt() const;
+  double RestPeriodEndAt() const;
+  int SetsAtPeak() const;
   const Direction& CountDirection() const;
 
-  class Type {
-  public:
-    static const QList<QString>& Types(void);
-
-    Type(int value = 0) throw (std::out_of_range);
-
-    Type(const QString &name) throw (std::invalid_argument);
-
-    operator QString() const;
-    
-    int Value() const;
-
-    bool operator==(const Type &rhs) const;
-    bool operator!=(const Type &rhs) const;
-
-  private:
-    static QList<QString> types;
-
-    int value;
-
-    static void InitialiseStaticData();
+  enum Type {
+    LADDER,
+    PYRAMID,
+    PLATEAU,
+    CONSTANT,
   };
 
-  class Direction {
-  public:
-    static const QList<QString>& Directions(void);
-
-    Direction(int value = 0) throw (std::out_of_range);
-
-    Direction(const QString &name) throw (std::invalid_argument);
-
-    operator QString() const;
-
-    int Value() const;
-
-    bool operator==(const Direction &rhs) const;
-    bool operator!=(const Direction &rhs) const;
-
-  private:
-    static QList<QString> directions;
-
-    int value;
-
-    static void InitialiseStaticData();
+  enum Direction {
+    DOWN,
+    UP,
   };
+
+  Q_ENUMS(Type Direction);
 
 protected:
+  const SetParameters &WorkoutParameters() const;
+  SetParameters &WorkoutParameters();
+  const SetParameters &RestParameters() const;
+  SetParameters &RestParameters();
+
+  void SetWorkoutParameters(const SetParameters &parameters);
+  void SetRestParameters(const SetParameters &parameters);
+
   std::pair<QString, QString> name;
 
   std::pair<QString, Type> type;
-
-  std::pair<QString, double> timeStep;
-
-  std::pair<QString, double> startMultiplier;
-  std::pair<QString, double> peakMultiplier;
-  std::pair<QString, double> endMultiplier;
-
-  std::pair<QString, double> stepsAtPeak;
-
+  std::pair<QString, int> sets;
+  std::pair<QString, int> setsAtPeak;
   std::pair<QString, Direction> countDirection;
+
+  std::pair<QString, SetParameters> workoutParameters;
+  std::pair<QString, SetParameters> restParameters;
 
 private:
   void Initialise(
     const QString &name = "",
-    const Type &type = Type("Ladder"),
-    double timeStep = 10,
-    double startMultiplier = 1,
-    double peakMultiplier = 0,
-    double endMultiplier = 10,
-    double stepsAtPeak = 0,
-    const Direction &countDirection = Direction("Down"));
+    const Type &type = LADDER,
+    int sets = 10,
+    const SetParameters &workoutParameters = SetParameters(),
+    const SetParameters &restParameters = SetParameters(),
+    int setsAtPeak = 1,
+    const Direction &countDirection = DOWN);
 };
 
 Q_DECLARE_METATYPE(Interval);

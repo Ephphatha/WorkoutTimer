@@ -1,47 +1,35 @@
 #include "workouttimer.h"
 
 #include <QFileDialog>
-#include <QSettings>
+
 #include <QJsonDocument>
 #include <QJsonArray>
 #include <QJsonObject>
 #include <QJsonValue>
+
+#include <QMetaEnum>
+
+#include <QSettings>
 
 WorkoutTimer::WorkoutTimer(QWidget *parent)
   : QMainWindow(parent)
 {
 	this->ui.setupUi(this);
 
-  if (this->ui.intervalTypeComboBox->count() == Interval::Type::Types().size())
   {
-    for (int i = 0; i < Interval::Type::Types().size(); ++i)
-    {
-      if (this->ui.intervalTypeComboBox->itemText(i) != Interval::Type::Types()[i])
-      {
-        this->ui.intervalTypeComboBox->setItemText(i, Interval::Type::Types()[i]);
-      }
-    }
-  }
-  else
-  {
+    QMetaEnum enumerator = Interval::staticMetaObject.enumerator(Interval::staticMetaObject.indexOfEnumerator("Type"));
     this->ui.intervalTypeComboBox->clear();
-    this->ui.intervalTypeComboBox->addItems(Interval::Type::Types());
-  }
-  
-  if (this->ui.timerStyleComboBox->count() == Interval::Direction::Directions().size())
-  {
-    for (int i = 0; i < Interval::Direction::Directions().size(); ++i)
+    for (int i = 0; i < enumerator.keyCount(); ++i)
     {
-      if (this->ui.timerStyleComboBox->itemText(i) != Interval::Direction::Directions()[i])
-      {
-        this->ui.timerStyleComboBox->setItemText(i, Interval::Direction::Directions()[i]);
-      }
+      this->ui.intervalTypeComboBox->addItem(enumerator.key(i));
     }
-  }
-  else
-  {
+
+    enumerator = Interval::staticMetaObject.enumerator(Interval::staticMetaObject.indexOfEnumerator("Direction"));
     this->ui.timerStyleComboBox->clear();
-    this->ui.timerStyleComboBox->addItems(Interval::Direction::Directions());
+    for (int i = 0; i < enumerator.keyCount(); ++i)
+    {
+      this->ui.timerStyleComboBox->addItem(enumerator.key(i));
+    }
   }
 
   this->toolButtonSignalMapper = new QSignalMapper(this);
@@ -163,52 +151,77 @@ void WorkoutTimer::activeIntervalChanged(const QModelIndex &current)
     const Interval &interval = intervalWrapper->data(IntervalRole).value<Interval>();
   
     this->ui.nameLineEdit->setText(interval.Name());
-    this->ui.intervalTypeComboBox->setCurrentIndex(interval.GetType().Value());
-    this->ui.timeStepSpinBox->setValue(static_cast<int>(interval.TimeStep()));
-    this->ui.startingMultiplierSpinBox->setValue(static_cast<int>(interval.StartMultiplier()));
-    this->ui.peakMultiplierSpinBox->setValue(static_cast<int>(interval.PeakMultiplier()));
-    this->ui.endingMultiplierSpinBox->setValue(static_cast<int>(interval.EndMultiplier()));
-    this->ui.stepsAtPeakSpinBox->setValue(static_cast<int>(interval.StepsAtPeak()));
-    this->ui.timerStyleComboBox->setCurrentIndex(interval.CountDirection().Value());
+    this->ui.intervalTypeComboBox->setCurrentIndex(interval.GetType());
+    this->ui.setsSpinBox->setValue(interval.Sets());
+    this->ui.setsAtPeakSpinBox->setValue(interval.SetsAtPeak());
+    this->ui.timerStyleComboBox->setCurrentIndex(interval.CountDirection());
+
+    this->ui.workoutStartAtDoubleSpinBox->setValue(interval.WorkoutPeriodStartAt());
+    this->ui.workoutPeakAtDoubleSpinBox->setValue(interval.WorkoutPeriodPeakAt());
+    this->ui.workoutEndAtDoubleSpinBox->setValue(interval.WorkoutPeriodEndAt());
+
+    this->ui.restStartAtDoubleSpinBox->setValue(interval.RestPeriodStartAt());
+    this->ui.restPeakAtDoubleSpinBox->setValue(interval.RestPeriodStartAt());
+    this->ui.restEndAtDoubleSpinBox->setValue(interval.RestPeriodStartAt());
     
     this->ui.nameLineEdit->setEnabled(true);
     this->ui.intervalTypeComboBox->setEnabled(true);
     this->ui.timerStyleComboBox->setEnabled(true);
 
-    if (interval.GetType() == "Ladder")
+    switch (interval.GetType())
     {
-      this->ui.timeStepSpinBox->setEnabled(true);
-      this->ui.startingMultiplierSpinBox->setEnabled(true);
-      this->ui.endingMultiplierSpinBox->setEnabled(true);
+    case Interval::Type::LADDER:
+      this->ui.setsSpinBox->setEnabled(true);
+      this->ui.setsAtPeakSpinBox->setEnabled(false);
 
-      this->ui.peakMultiplierSpinBox->setEnabled(false);
-      this->ui.stepsAtPeakSpinBox->setEnabled(false);
-    }
-    else if (interval.GetType() == "Pyramid")
-    {
-      this->ui.timeStepSpinBox->setEnabled(true);
-      this->ui.startingMultiplierSpinBox->setEnabled(true);
-      this->ui.endingMultiplierSpinBox->setEnabled(true);
-      this->ui.peakMultiplierSpinBox->setEnabled(true);
+      this->ui.workoutStartAtDoubleSpinBox->setEnabled(true);
+      this->ui.workoutPeakAtDoubleSpinBox->setEnabled(false);
+      this->ui.workoutEndAtDoubleSpinBox->setEnabled(true);
+      
+      this->ui.restStartAtDoubleSpinBox->setEnabled(true);
+      this->ui.restPeakAtDoubleSpinBox->setEnabled(false);
+      this->ui.restEndAtDoubleSpinBox->setEnabled(true);
+      break;
 
-      this->ui.stepsAtPeakSpinBox->setEnabled(false);
-    }
-    else if (interval.GetType() == "Plateau")
-    {
-      this->ui.timeStepSpinBox->setEnabled(true);
-      this->ui.startingMultiplierSpinBox->setEnabled(true);
-      this->ui.endingMultiplierSpinBox->setEnabled(true);
-      this->ui.peakMultiplierSpinBox->setEnabled(true);
-      this->ui.stepsAtPeakSpinBox->setEnabled(true);
-    }
-    else if (interval.GetType() == "Constant")
-    {
-      this->ui.timeStepSpinBox->setEnabled(true);
-      this->ui.peakMultiplierSpinBox->setEnabled(true);
-      this->ui.stepsAtPeakSpinBox->setEnabled(true);
 
-      this->ui.startingMultiplierSpinBox->setEnabled(false);
-      this->ui.endingMultiplierSpinBox->setEnabled(false);
+    case Interval::Type::PYRAMID:
+      this->ui.setsSpinBox->setEnabled(true);
+      this->ui.setsAtPeakSpinBox->setEnabled(false);
+
+      this->ui.workoutStartAtDoubleSpinBox->setEnabled(true);
+      this->ui.workoutPeakAtDoubleSpinBox->setEnabled(true);
+      this->ui.workoutEndAtDoubleSpinBox->setEnabled(true);
+      
+      this->ui.restStartAtDoubleSpinBox->setEnabled(true);
+      this->ui.restPeakAtDoubleSpinBox->setEnabled(true);
+      this->ui.restEndAtDoubleSpinBox->setEnabled(true);
+      break;
+
+    case Interval::Type::PLATEAU:
+      this->ui.setsSpinBox->setEnabled(true);
+      this->ui.setsAtPeakSpinBox->setEnabled(true);
+
+      this->ui.workoutStartAtDoubleSpinBox->setEnabled(true);
+      this->ui.workoutPeakAtDoubleSpinBox->setEnabled(true);
+      this->ui.workoutEndAtDoubleSpinBox->setEnabled(true);
+      
+      this->ui.restStartAtDoubleSpinBox->setEnabled(true);
+      this->ui.restPeakAtDoubleSpinBox->setEnabled(true);
+      this->ui.restEndAtDoubleSpinBox->setEnabled(true);
+      break;
+
+    case Interval::Type::CONSTANT:
+      this->ui.setsSpinBox->setEnabled(true);
+      this->ui.setsAtPeakSpinBox->setEnabled(false);
+
+      this->ui.workoutStartAtDoubleSpinBox->setEnabled(false);
+      this->ui.workoutPeakAtDoubleSpinBox->setEnabled(true);
+      this->ui.workoutEndAtDoubleSpinBox->setEnabled(false);
+      
+      this->ui.restStartAtDoubleSpinBox->setEnabled(false);
+      this->ui.restPeakAtDoubleSpinBox->setEnabled(true);
+      this->ui.restEndAtDoubleSpinBox->setEnabled(false);
+      break;
     }
   }
   else
@@ -216,12 +229,17 @@ void WorkoutTimer::activeIntervalChanged(const QModelIndex &current)
     this->ui.nameLineEdit->setEnabled(false);
     this->ui.intervalTypeComboBox->setEnabled(false);
     this->ui.timerStyleComboBox->setEnabled(false);
+    
+    this->ui.setsSpinBox->setEnabled(false);
+    this->ui.setsAtPeakSpinBox->setEnabled(false);
 
-    this->ui.timeStepSpinBox->setEnabled(false);
-    this->ui.startingMultiplierSpinBox->setEnabled(false);
-    this->ui.endingMultiplierSpinBox->setEnabled(false);
-    this->ui.peakMultiplierSpinBox->setEnabled(false);
-    this->ui.stepsAtPeakSpinBox->setEnabled(false);
+    this->ui.workoutStartAtDoubleSpinBox->setEnabled(false);
+    this->ui.workoutPeakAtDoubleSpinBox->setEnabled(false);
+    this->ui.workoutEndAtDoubleSpinBox->setEnabled(false);
+      
+    this->ui.restStartAtDoubleSpinBox->setEnabled(false);
+    this->ui.restPeakAtDoubleSpinBox->setEnabled(false);
+    this->ui.restEndAtDoubleSpinBox->setEnabled(false);
   }
 }
 
